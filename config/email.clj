@@ -1,0 +1,1 @@
+{:development {:from "test@bobby-conf.com", :smtp "smtp.localhost"}, :production {:from "noreply@bobby-conf.com", :smtp "smtp.bobby-conf.com"}}
