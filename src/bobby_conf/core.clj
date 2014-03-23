@@ -31,7 +31,9 @@
             (config k))
 
     (when (map? (config k))
-      (create-defs! ns (config k) (str prefix (name k) "-")))))
+      (create-defs! ns
+                    (config k)
+                    (str prefix (name k) "-")))))
 
 (defmacro load
   [filename & qualifiers]
