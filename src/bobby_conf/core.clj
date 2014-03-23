@@ -2,19 +2,26 @@
   (:refer-clojure :exclude [load])
   (:import [java.io File]))
 
-(defn- filepath
-  [filename]
-  (str "config" File/separator filename))
-
 (defn- config
   [filename & qualifiers]
   (reduce (fn [c q] (c q))
-          (load-file (filepath filename))
+          (load-file filename)
           qualifiers))
+
+(defn- basename
+  [filename]
+  (clojure.string/replace filename #"(.*/|.*\\|^)([^/\\]+)" "$2"))
+
+(defn- strip-extension
+  [filename]
+  (clojure.string/replace filename #"\.[^\.]+$" ""))
 
 (defn- prefix
   [filename]
-  (str (clojure.string/replace filename #"\.[^\.]+$" "") "-"))
+  (-> filename
+      basename
+      strip-extension
+      (str "-")))
 
 (defn- create-defs!
   [ns config prefix]
@@ -31,6 +38,12 @@
   `(~create-defs! *ns*
                   (~config ~filename ~@qualifiers)
                   (~prefix ~filename)))
+
+(defmacro become
+  [filename & qualifiers]
+  `(~create-defs! *ns*
+                  (~config ~filename ~@qualifiers)
+                  ""))
 
 (defn env
   []

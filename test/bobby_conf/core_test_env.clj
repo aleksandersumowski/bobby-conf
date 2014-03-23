@@ -2,6 +2,14 @@
   (:require [bobby-conf.core :as bc]
             [expectations :refer :all]))
 
+;; Test setup to ensure the test config file has been created
+;; with expected values.
+(spit "config/email.clj"
+      (str {:development {:from "test@bobby-conf.com"
+                          :smtp "smtp.localhost"}
+            :production {:from "noreply@bobby-conf.com"
+                         :smtp "smtp.bobby-conf.com"}}))
+
 ;; Initialize bobby-conf for the listed environments
 (bc/init :environments [:development :staging :production])
 
@@ -11,6 +19,17 @@
 
 (expect :development
         env)
+
+;; In this way, once `init` has been called, `env` can easily be used as
+;; a qualifier when loading config files, like this:
+(bc/init :environments [:development :staging :production])
+(bc/load "config/email.clj" env)
+
+(expect "test@bobby-conf.com"
+        email-from)
+
+(expect "smtp.localhost"
+        email-smtp)
 
 ;; For each of the environments specified as arguments to `init`, a
 ;; predicate `def` is created, and set to `true` if it matches the value of

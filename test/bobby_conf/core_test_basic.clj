@@ -12,7 +12,7 @@
 
 ;; Load the test config into the current namespace
 ;; ready to assert against.
-(bc/load "db.clj")
+(bc/load "config/db.clj")
 
 ;; A `def` is created for each top level key in the configuration map.
 (expect "127.0.0.1"

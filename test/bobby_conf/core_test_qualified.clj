@@ -4,18 +4,13 @@
 
 ;; Test setup to ensure the test config file has been created
 ;; with expected values.
-(spit "config/email.clj"
-      (str {:development {:from "test@bobby-conf.com"
-                          :smtp "smtp.localhost"}
-            :production {:from "noreply@bobby-conf.com"
-                         :smtp "smtp.bobby-conf.com"}}))
+(spit "config/locales.clj"
+      (str {:en {:cat "I am a cat!"}
+            :fr {:cat "Je suis un chat!"}}))
 
 ;; Providing a qualifier keyword loads only the config contained in the
 ;; submap identified by that key
-(bc/load "email.clj" :production)
+(bc/load "config/locales.clj" :fr)
 
-(expect "noreply@bobby-conf.com"
-        email-from)
-
-(expect "smtp.bobby-conf.com"
-        email-smtp)
+(expect "Je suis un chat!"
+        locales-cat)
