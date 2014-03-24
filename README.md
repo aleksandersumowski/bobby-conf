@@ -80,7 +80,9 @@ email-smtp ;; => "smtp.bobby-conf.com"
 
 The qualifier doesn't have to be `env`; it could just as easily be any other Clojure keyword, such as one representing the current locale (eg. `:en` or `:fr`).
 
+```clojure
 (bc/load "config/locales.clj" :fr)
+```
 
 ## Becoming
 
