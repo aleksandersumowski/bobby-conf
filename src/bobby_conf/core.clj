@@ -68,10 +68,44 @@
   (symbol (str (name env) "?")))
 
 (defmacro init
-  [& {envs :environments}]
+  "Initialize configuration in the current namespace.
+   Creates a `def` called `env` which returns the value of
+   the `APP_ENV` environment variable as a Clojure keyword,
+   defaulting to `:development` if it is not set.
+
+   Takes a keyed set of parameters in the following format:
+  `(init :environments [:development :staging :production]
+         :scoped [\"config/db.clj\" \"config/s3.clj\"]
+         :shared [\"config/airbrake.clj\"])`
+
+   Where:
+
+  `:environments` is a list of the environments your
+   program will be run in (a predicate value will be defined
+   for each one, and will be set to true if it matches the
+   value of the `APP_ENV` environment variable.
+
+  `:scoped` is a list of config files that are scoped by
+   environment (that is, have top level keys matching the names
+   of the possible environments, plus an optional `:default` key
+   which acts as you would expect).
+
+  `:shared` is a list of config files that are not scoped -
+   their values are shared between all environments in which the
+   program is run."
+  [& {envs   :environments
+      scoped :scoped
+      shared :shared}]
   `(do
      (intern *ns* ~''env ~(env))
+
      (doseq [e# ~envs]
        (intern *ns*
                (~predicate-name e#)
-               (= e# ~'env)))))
+               (= e# ~'env)))
+
+     (doseq [c# ~scoped]
+       (load c# ~(env)))
+
+     (doseq [c# ~shared]
+       (load c#))))
