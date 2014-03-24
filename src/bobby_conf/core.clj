@@ -47,13 +47,13 @@
                   (~config ~filename ~@qualifiers)
                   ""))
 
-(defn env
+(defn- env
   []
   (keyword (get (System/getenv)
                 "APP_ENV"
                 "development")))
 
-(defn predicate-name
+(defn- predicate-name
   [env]
   (symbol (str (name env) "?")))
 
