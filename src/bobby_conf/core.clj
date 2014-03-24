@@ -2,9 +2,19 @@
   (:refer-clojure :exclude [load])
   (:import [java.io File]))
 
+(defn- nested-merge
+  [a b]
+  (merge-with
+    (fn [a b]
+      (if (and (map? a)
+               (map? b))
+        (nested-merge a b) b))
+    a b))
+
 (defn- config
   [filename & qualifiers]
-  (reduce (fn [c q] (c q))
+  (reduce (fn [c q] (nested-merge (:default c {})
+                                  (c q)))
           (load-file filename)
           qualifiers))
 

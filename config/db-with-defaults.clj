@@ -1,0 +1,1 @@
+{:default {:host "127.0.0.1", :port 8008, :credentials {:user "root"}}, :development {:metadata {:y 12, :x 14}, :port 7777, :credentials {:password "Pa55word1"}}, :production {:credentials {:password "r34allyS3cur3P455w0rd"}}}
