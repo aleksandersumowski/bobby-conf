@@ -1,4 +1,4 @@
-(defproject bobby-conf "0.0.1"
+(defproject bobby-conf "0.0.2-SNAPSHOT"
   :description "Simple configuration for Clojure apps"
   :url "http://github.com/rsslldnphy/bobby-conf"
   :license {:name "Eclipse Public License"
