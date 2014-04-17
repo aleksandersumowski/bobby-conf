@@ -15,7 +15,7 @@
 
 (bc/init :environments [:development :production])
 
-(bc/become "config/db-with-defaults.clj" env)
+(bc/become "config/db-with-defaults.clj" (env))
 
 ;; Values in the default map are created as `def`s
 (expect "127.0.0.1" host)

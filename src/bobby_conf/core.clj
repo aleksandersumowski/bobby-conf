@@ -2,6 +2,12 @@
   (:refer-clojure :exclude [load])
   (:import [java.io File]))
 
+(defn env
+  []
+  (keyword (get (System/getenv)
+                "APP_ENV"
+                "development")))
+
 (defn- nested-merge
   [a b]
   (merge-with
@@ -57,12 +63,6 @@
                   (~config ~filename ~@qualifiers)
                   ""))
 
-(defn- env
-  []
-  (keyword (get (System/getenv)
-                "APP_ENV"
-                "development")))
-
 (defn- predicate-name
   [env]
   (symbol (str (name env) "?")))
@@ -97,15 +97,13 @@
       scoped :scoped
       shared :shared}]
   `(do
-     (intern *ns* ~''env ~(env))
+     (intern *ns* '~'env env)
 
      (doseq [e# ~envs]
        (intern *ns*
                (~predicate-name e#)
-               (= e# ~'env)))
+               (fn [] (= e# (env)))))
 
-     (doseq [c# ~scoped]
-       (load c# ~(env)))
+     (doseq [c# ~scoped] (load c# (env)))
 
-     (doseq [c# ~shared]
-       (load c#))))
+     (doseq [c# ~shared] (load c#))))

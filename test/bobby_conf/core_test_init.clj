@@ -8,8 +8,8 @@
          :shared ["config/db.clj"]
          :environments [:development :staging :production])
 
-(expect true development?)
-(expect false staging?)
+(expect true (development?))
+(expect false (staging?))
 
 (expect "127.0.0.1" db-host)
 (expect "test@bobby-conf.com" email-from)

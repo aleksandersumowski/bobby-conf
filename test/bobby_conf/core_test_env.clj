@@ -18,12 +18,12 @@
 ;; to a Clojure keyword). If not present, it defaults to `:development`.
 
 (expect :development
-        env)
+        (env))
 
 ;; In this way, once `init` has been called, `env` can easily be used as
 ;; a qualifier when loading config files, like this:
 (bc/init :environments [:development :staging :production])
-(bc/load "config/email.clj" env)
+(bc/load "config/email.clj" (env))
 
 (expect "test@bobby-conf.com"
         email-from)
@@ -35,10 +35,10 @@
 ;; predicate `def` is created, and set to `true` if it matches the value of
 ;; the `APP_ENV` environment variable, `false` otherwise.
 (expect true
-        development?)
+        (development?))
 
 (expect false
-        staging?)
+        (staging?))
 
 (expect false
-        production?)
+        (production?))
