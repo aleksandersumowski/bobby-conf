@@ -43,22 +43,22 @@ As you can see, nested maps can be accessed both by their top level key (returni
 
 ## Environment specific configuration
 
-Calling `bc/init` creates a `def` called `env` in the current namespace, set to the value of the environment variable `APP_ENV` (as a keyword), or `:development` if it is not set.
+Calling `bc/init` creates a function called `env` in the current namespace, which returns the value of the environment variable `APP_ENV` (as a keyword), or `:development` if it is not set.
 
-Also, a predicate `def` will be defined for each of the environments specified in `init`, and will be set to true if it matches the value of `env`:
+Also, a predicate function will be defined for each of the environments specified in `init`, and will be set to true if it matches the value of `env`:
 
 ```clojure
 ;; Assuming APP_ENV is set to "production"
 (bc/init :environments [:development :staging :production])
-development? ;; => false
-staging? ;; => false
-production? ;; => true
+(development?) ;; => false
+(staging?) ;; => false
+(production?) ;; => true
 ```
 
 `env` can also be used to load environment specific configuration by passing it as a qualifier to `load`:
 
 ```clojure
-(bc/load "config/email.clj" env)
+(bc/load "config/email.clj" (env))
 ```
 
 This expects the given file to have a set of submaps keyed on the environment to which they should apply, and will load configuration for the matching environment only.
